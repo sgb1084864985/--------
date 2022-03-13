@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.13.4)
+include(preload.cmake)
+
+set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG -O0")
+
+include_directories(wxWidgets/include)
+include_directories(src/game)
+include_directories(src/net)
+include_directories(src/app)
+
+project(PokeGame)
+aux_source_directory(src/app APP)
+aux_source_directory(src/game GAME)
+aux_source_directory(src/net NET)
+# add_executable(main main.cc ${APP} ${NET})
+add_executable(main main.cc ${APP} ${GAME} ${NET})
+
+set(wxWidgets_ROOT_DIR ./wxWidgets)
+set(wxWidgets_CONFIGURATION msw)
+find_package(wxWidgets REQUIRED gl core base)
+include(${wxWidgets_USE_FILE})
+target_link_libraries(main ${wxWidgets_LIBRARIES})
+target_link_libraries(main wsock32 ws2_32)
